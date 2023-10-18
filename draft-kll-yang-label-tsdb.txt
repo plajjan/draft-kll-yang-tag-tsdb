@@ -9,7 +9,7 @@ Expires: 20 April 2024
 
 
                Mapping YANG Data to Label-Set Time Series
-                 draft-kll-yang-label-timeseries-latest
+                    draft-kll-yang-label-tsdb-latest
 
 Abstract
 
