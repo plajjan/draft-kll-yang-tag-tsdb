@@ -1,3 +1,3 @@
-# draft-kll-yang-to-tag-tsdb
+# draft-kll-yang-tag-tsdb
 
 Work in progress repository.

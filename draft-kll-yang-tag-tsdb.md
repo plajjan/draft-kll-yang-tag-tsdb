@@ -1,29 +1,33 @@
 ---
-stand_alone: true
 title: Encoding YANG-Modeled Data for Storage in Tag-Centric Time Series Databases
-category: standards track
-workgroup: 
+abbrev: yang-tag-tsdb
+category: std
+
+docname: draft-kll-yang-tag-tsdb-latest
+submissiontype: IETF
+ipr: trust200902
 
 lang: en
-kw:
+keyword:
   - Internet-Draft
 
 pi:
   - toc
-  
-normative:
-
-informative:
+  - sortrefs
+  - symrefs
 
 author:
 -   ins: K. Larsson
     name: Kristian Larsson
     organization: Deutsche Telekom
     email: kll@dev.terastrm.net
-    
-contributor:
 
---- abstract 
+normative:
+  RFC7950:
+
+informative:
+
+--- abstract
 
 This document proposes a standardized approach for representing YANG-modeled configuration and state data, for storage in Time Series Databases (TSDBs) that utilize a tag-centric model. It outlines procedures for translating YANG data representations to fit within the tag-centric structures of TSDBs and vice versa. This mapping ensures clear and efficient storage and querying of YANG-modeled data in TSDBs.
 
