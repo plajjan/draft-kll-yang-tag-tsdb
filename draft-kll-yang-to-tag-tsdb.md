@@ -55,7 +55,7 @@ Original YANG Instance-Identifier:
 
 Following the mapping rules defined:
 
-1. The path components, including containers and list names, are transformed into the metric name by joining the node names with `_`. `-` is also replaced with `_`.
+1. The path components, including containers and list names, are transformed into the metric name by joining the node names with `_`. Special symbols, e.g. `-` are replaced with `_`.
 
 Resulting Metric Name:
 ```
@@ -78,7 +78,7 @@ Value:
 5432100
 ```
 
-4. As part of the standard tags, the device name is also included. For this example, let's assume the device name is `router-01`:
+4. As part of the standard tags, a server identification string is also included. A typical choice of identifier might be the hostname. For this example, let's assume the device name is `router-01`:
 
 Tag:
 ```
@@ -97,20 +97,21 @@ Final Mapping in the TSDB:
 
 Leaf values are mapped based on their intrinsic type:
 
-- Integer and float values retain their native representation.
+- All integer types are mapped to integers and retain their native representation
+  - some implementations only support floats for numeric values
+- decimal64 values are mapped to floats and the value should be rounded and truncated as to minimize the loss of information
 - Enumeration types are mapped using their string representation.
 - String types remain unchanged.
 
 ## Choice
 
-Choice constructs from YANG are disregarded and not enforced during the mapping process. Given the temporal nature of TSDBs, where data spans across time, multiple choices could be concurrently active, rendering validation and storage restrictions impractical.
+Choice constructs from YANG are disregarded and not enforced during the mapping process. Given the temporal nature of TSDBs, where data spans across time, different choice branches could be active in a single data set, rendering validation and storage restrictions impractical.
 
 ## Host / device name
 
-There is an implicit `host` tag set to the name of the host originating the time series data.
+There is an implicit `host` tag identifying the server, typically set to the name of the host originating the time series data.
 
-The YANG models supported by devices are rooted on the device level and as such, do not contain information, like the name, about the device itself. As a time series database is likely going to contain data from multiple devices / hosts, the `host` tag is used to disambiguate the data.
-
+Instance data retrieved from YANG-based servers do not generally identify the server it originates from. As a time series database is likely going to contain data from multiple servers, the `host` tag is used to identify the source of the data.
 
 
 # Querying YANG modeled time series data
