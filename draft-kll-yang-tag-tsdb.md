@@ -44,7 +44,7 @@ This document seeks to bridge this structural gap, laying out rules and guidelin
 
 # Specification of the Mapping Procedure
 
-Instances of YANG data nodes are mapped to metrics. Only nodes that carry a value are mapped. This includes leafs and presence containers. The hierarchical path to a value, including non-presence containers and lists, form the path that is used as the name of the metric. The path is formed by joining YANG data nodes using `_`.
+Instances of YANG data nodes are mapped to metrics. Only nodes that carry a value are mapped. This includes leafs and presence containers. The hierarchical path to a value, including non-presence containers and lists, form the path that is used as the name of the metric. The path is formed by joining YANG data nodes using `_`. Special symbols, e.g. `-`, in node names are replaced with `_`.
 
 List keys are mapped into tags. The path to the list key is transformed in the same way as the primary name of the metric. Compound keys have each key part as as separate tag.
 
