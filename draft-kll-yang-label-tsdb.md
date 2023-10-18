@@ -20,7 +20,7 @@ author:
 -   ins: K. Larsson
     name: Kristian Larsson
     organization: Deutsche Telekom
-    email: kll@dev.terastrm.net
+    email: kristian@spritelink.net
 
 normative:
   RFC7950:
