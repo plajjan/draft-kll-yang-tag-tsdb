@@ -26,7 +26,7 @@ Discussion Venues
    This note is to be removed before publishing as an RFC.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/plajjan/draft-kll-yang-tag-tsdb.
+   https://github.com/plajjan/draft-kll-yang-label-tsdb.
 
 Status of This Memo
 
@@ -351,4 +351,4 @@ Author's Address
 
    Kristian Larsson
    Deutsche Telekom
-   Email: kll@dev.terastrm.net
+   Email: kristian@spritelink.net
