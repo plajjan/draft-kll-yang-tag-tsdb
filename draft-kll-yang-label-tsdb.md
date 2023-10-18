@@ -1,9 +1,9 @@
 ---
-title: Encoding YANG-Modeled Data for Storage in Tag-Centric Time Series Databases
-abbrev: yang-tag-tsdb
+title: Mapping YANG Data to Label-Set Time Series
+abbrev: yang-label-tsdb
 category: std
 
-docname: draft-kll-yang-tag-tsdb-latest
+docname: draft-kll-yang-label-tsdb-latest
 submissiontype: IETF
 ipr: trust200902
 
@@ -29,24 +29,23 @@ informative:
 
 --- abstract
 
-This document proposes a standardized approach for representing YANG-modeled configuration and state data, for storage in Time Series Databases (TSDBs) that utilize a tag-centric model. It outlines procedures for translating YANG data representations to fit within the tag-centric structures of TSDBs and vice versa. This mapping ensures clear and efficient storage and querying of YANG-modeled data in TSDBs.
+This document proposes a standardized approach for representing YANG-modeled configuration and state data, for storage in Time Series Databases (TSDBs) that identify time series using a label-set. It outlines procedures for translating YANG data representations to fit within the label-centric structures of TSDBs and vice versa. This mapping ensures clear and efficient storage and querying of YANG-modeled data in TSDBs.
 
 --- middle
 
 # Introduction
 
-The aim of this document is to define rules for representing configuration and state data defined using the YANG data modeling language [RFC7950] as time series using a tag centric model.
+The aim of this document is to define rules for representing configuration and state data defined using the YANG data modeling language [RFC7950] as time series using a label-centric model.
 
-The majority of modern Time Series Databases (TSDBs) employ a tag-centric model. In this structure, data points are indexed primarily by tags, each consisting of a key-value pair. These tags facilitate efficient querying, aggregation, and filtering of data over time intervals. Such a model contrasts with the hierarchical nature of YANG-modeled data. The challenge, therefore, lies in ensuring that YANG-defined data, with its inherent structure and depth, can be seamlessly integrated into the flat, tag-based structure of most contemporary TSDBs.
+The majority of modern Time Series Databases (TSDBs) employ a label-centric model. In this structure, time series are identified by a set of labels, each consisting of a key-value pair. These labels facilitate efficient querying, aggregation, and filtering of data over time intervals. Such a model contrasts with the hierarchical nature of YANG-modeled data. The challenge, therefore, lies in ensuring that YANG-defined data, with its inherent structure and depth, can be seamlessly integrated into the flat, label-based structure of most contemporary TSDBs.
 
-This document seeks to bridge this structural gap, laying out rules and guidelines to ensure that YANG-modeled configuration and state data can be effectively stored, queried, and analyzed within tag-centric TSDBs.
-
+This document seeks to bridge this structural gap, laying out rules and guidelines to ensure that YANG-modeled configuration and state data can be effectively stored, queried, and analyzed within label-centric TSDBs.
 
 # Specification of the Mapping Procedure
 
 Instances of YANG data nodes are mapped to metrics. Only nodes that carry a value are mapped. This includes leafs and presence containers. The hierarchical path to a value, including non-presence containers and lists, form the path that is used as the name of the metric. The path is formed by joining YANG data nodes using `_`. Special symbols, e.g. `-`, in node names are replaced with `_`.
 
-List keys are mapped into tags. The path to the list key is transformed in the same way as the primary name of the metric. Compound keys have each key part as as separate tag.
+List keys are mapped into labels. The path to the list key is transformed in the same way as the primary name of the metric. Compound keys have each key part as a separate label.
 
 ## Example: Packet Counters in IETF Interfaces Model
 
@@ -82,9 +81,9 @@ Value:
 5432100
 ```
 
-4. As part of the standard tags, a server identification string is also included. A typical choice of identifier might be the hostname. For this example, let's assume the device name is `router-01`:
+4. As part of the standard labels, a server identification string is also included. A typical choice of identifier might be the hostname. For this example, let's assume the device name is `router-01`:
 
-Tag:
+Label:
 ```
 host = router-01
 ```
@@ -93,7 +92,7 @@ Final Mapping in the TSDB:
 
 - Metric: `interfaces_interface_statistics_in_unicast_pkts`
 - Value: `5432100`
-- Tags:
+- Labels:
   - `host` = `router-01`
   - `interfaces_interface_name` = `eth0`
 
@@ -113,14 +112,13 @@ Choice constructs from YANG are disregarded and not enforced during the mapping 
 
 ## Host / device name
 
-There is an implicit `host` tag identifying the server, typically set to the name of the host originating the time series data.
+There is an implicit `host` label identifying the server, typically set to the name of the host originating the time series data.
 
-Instance data retrieved from YANG-based servers do not generally identify the server it originates from. As a time series database is likely going to contain data from multiple servers, the `host` tag is used to identify the source of the data.
-
+Instance data retrieved from YANG-based servers do not generally identify the server it originates from. As a time series database is likely going to contain data from multiple servers, the `host` label is used to identify the source of the data.
 
 # Querying YANG modeled time series data
 
-The process of storing YANG-modeled data in tag-centric TSDBs, as defined in the previous sections, inherently structures the data in a way that leverages the querying capabilities of modern TSDBs. This chapter provides guidelines on how to construct queries to retrieve this data effectively.
+The process of storing YANG-modeled data in label-centric TSDBs, as defined in the previous sections, inherently structures the data in a way that leverages the querying capabilities of modern TSDBs. This chapter provides guidelines on how to construct queries to retrieve this data effectively.
 
 ## 1. **Basic Queries**
 
@@ -136,7 +134,7 @@ To retrieve all data points related to incoming unicast packets from the IETF in
   interfaces_interface_statistics_in_unicast_pkts
   ```
 
-## 2. **Filtering by Tags**
+## 2. **Filtering by Labels**
 
 To retrieve incoming unicast packets specifically for the interface `eth0`:
 
@@ -238,7 +236,7 @@ This approach allows us to effectively query interfaces based on their operation
 
 # Requirements on time series databases
 
-This document specifies a mapping to a conceptual representation, not a particular concrete interface. To effectively support the mapping of YANG-modeled data into a tag-centric model, certain requirements must be met by the Time Series Databases (TSDBs). These requirements ensure that the data is stored and retrieved in a consistent and efficient manner.
+This document specifies a mapping to a conceptual representation, not a particular concrete interface. To effectively support the mapping of YANG-modeled data into a label-centric model, certain requirements must be met by the Time Series Databases (TSDBs). These requirements ensure that the data is stored and retrieved in a consistent and efficient manner.
 
 ## Support for String Values
 
@@ -252,4 +250,4 @@ YANG data nodes, especially when representing deep hierarchical structures, can 
 
 ## High Cardinality
 
-Given the possibility of numerous unique tag combinations (especially with dynamic values like interface names, device names, etc.), the chosen TSDB should handle high cardinality efficiently. High cardinality can impact database performance and query times, so it's essential for the TSDB to have mechanisms to manage this efficiently.
+Given the possibility of numerous unique label combinations (especially with dynamic values like interface names, device names, etc.), the chosen TSDB should handle high cardinality efficiently. High cardinality can impact database performance and query times, so it's essential for the TSDB to have mechanisms to manage this efficiently.
